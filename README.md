@@ -85,4 +85,30 @@ Finally, by combining the above circuits and applying pipelines and timing adjus
 | ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e9fd6261-f32d-4822-b84a-7364997f330d) | 27-bit floating-point multiplier! (Code in file FloatingPointMultiplier.v and includes 2 submodules and 1 pipeline layer) |
 | ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/7653af7d-d9ea-42e3-b4f1-dc855573dc87) | 27-bit floating-point adder (Code in file FloatingPointAdder.v and includes 3 main submodules and 2 pipeline layers) |
 
+## Testing
+The core processor has undergone several testings. The provided example demonstrates the testing of the sigmoid function's second step, where the Taylor series is used to calculate the inverse of `x`.
+```
+Let's assume:
+x = 0_00000010_101001111111011110 = 2^2 * (1/2 + 1/8 + 1/64 + …) ≈ 2^2 * (1/2 + 1/8 + 1/32) = 2.625
+1/x = 1/2.625 = 0.381
+Inputs to the core (1-fraction and –exp):
+1 - fraction = floating point(1) - 0.101001111111011110 = 0.1111111… - 0.101001111111011110 = 0.(~101001111111011110) = 0.010110000000100001 → 1-fraction = 27'b0_00000000_010110000000100001
+-exp = -2
 
+Output corresponding to the first input:
+0_11111111_110000110001010001 = 2^(-1) * (1/2 + 1/4 + 1/128 + …) = 0.381 → as expected.
+
+If the above inputs are applied, after passing through the pipeline path, the outputs appear consecutively in each clock (in the valid output sequence section).
+All Core functions have been tested similar to the example above and operate correctly.
+
+```verilog
+exp = -2;
+mul_in_1_single = 27'b0_00000000_010110000000100001; #20;
+mul_in_1_single = 27'b0_00000000_100110101001010100; #20;
+mul_in_1_single = 27'b0_00000000_110100000100010101; #20;
+mul_in_1_single = 27'b0_00000000_010110000000100001; #20;
+mul_in_1_single = 27'b0_00000000_100110101001010100; #20;
+mul_in_1_single = 27'b0_00000000_110100000100010101; #20;
+mul_in_1_single = 27'b0_00000000_010110000000100001;
+```
+```
