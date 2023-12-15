@@ -1,10 +1,10 @@
 # Accelerator Architecture for Fully-Connected Neural Networks Inference and Training
-This repository contains the Verilog code for an accelerator architecture designed for training and inference of **non-compressed** fully-connected neural networks. The architecture is optimized for FPGA implementation, featuring a core processor that efficiently handles the computations needed for uncompressed neural network algorithms. Verification has been performed using ModelSim.
+This repository contains the Verilog code for an accelerator architecture designed for training and inference of **non-compressed** fully connected neural networks. The architecture is optimized for FPGA implementation, featuring a core processor that efficiently handles the computations needed for uncompressed neural network algorithms. Verification has been performed using ModelSim.
 
 ## The Architecture
 The core processor is designed to execute the necessary instructions for a fully-connected neural network algorithm. The design utilizes a resilient 16 MAC structure which reforms to effectively tailor to each phase of the inference/training.
 
-This design also conducts a novel approach for performing computationally-intensive non-linearity functions such as Sigmod function. By expanding the non-linearity functions to their taylor series, and configuring the MAC interconnect appropriatly, this design can exploit the available MAC units to perform such operations.
+This design also conducts a novel approach for performing computationally intensive non-linearity functions such as the Sigmoid function. By expanding the non-linearity functions to their Taylor series, and configuring the MAC interconnect appropriately, this design can exploit the available MAC units to perform such operations.
 
 **Next we will see how the architecture aligns for each algorithm phase.**
 
@@ -52,16 +52,16 @@ To find `1 / fraction`, we use the following converging series:
 ```
 
 **Architectural setup for second Sigmod step:**
-<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/63cceaf0-bbfb-498b-9cbe-81ec1a704ef7" width=70% height=70%>
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/63cceaf0-bbfb-498b-9cbe-81ec1a704ef7" width=50% height=50%>
 
 ## Back Propagation
 Back Propagation calculates the error list and adjusts the weights accordingly.
 In this part of the algorithm, what cannot be easily done with the previous circuits is the multiplication of the transposed weight matrix by the error list. This is because parallel reading from this matrix involves 16 elements from one column, and after transposition, this rule changes. As a result, a different dataflow and architectural setup is needed for this part.
 
-**Architectural setup for back propagation:**
+**Architectural setup for backpropagation:**
 <img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/cbb38c35-c0e9-40d5-b5c5-115fc7fda395" width=80% height=80%>
 
-## Element-wise Multiplication and Additiom
+## Element-wise Multiplication and Addition
 Element-wise multiplication and addition of two matrices can also be performed in parallel, with the available components. For example, for element-wise multiplication, the following setup can be used:
 <img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e5019d5e-feef-4b2f-80ec-f15299118942" width=90% height=90%>
 
@@ -84,7 +84,7 @@ Finally, by combining the above circuits and applying pipelines and timing adjus
 | ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/7653af7d-d9ea-42e3-b4f1-dc855573dc87) | 27-bit floating-point adder (Code in file FloatingPointAdder.v and includes 3 main submodules and 2 pipeline layers) |
 
 ## Testing
-The core processor has undergone several testings. The provided example demonstrates the testing of the sigmoid function's second step, where the Taylor series is used to calculate the inverse of `x`.
+The core processor has undergone several tests. The provided example demonstrates the testing of the sigmoid function's second step, where the Taylor series is used to calculate the inverse of `x`.
 
 Let's assume:
 ```
