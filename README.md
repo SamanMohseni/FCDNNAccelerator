@@ -61,6 +61,7 @@ Back Propagation calculates the error list and adjusts the weights accordingly.
 In this part of the algorithm, what cannot be easily done with the previous circuits is the multiplication of the transposed weight matrix by the error list. This is because parallel reading from this matrix involves 16 elements from one column, and after transposition, this rule changes. As a result, a different dataflow and architectural setup is needed for this part.
 
 **Architectural setup for backpropagation:**
+
 <img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/cbb38c35-c0e9-40d5-b5c5-115fc7fda395" width=60% height=60%>
 
 ## Element-wise Multiplication and Addition
@@ -69,6 +70,7 @@ Element-wise multiplication and addition of two matrices can also be performed i
 
 ## Final Architecture
 Finally, by combining the above circuits and applying pipelines and timing adjustments, we arrive at the following architecture (implemented in `FCDNNAccelerator/Core.v`):
+
 ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/2ee1985a-127e-4232-8171-05c48398ff78)
 
 **Modules and Components:**
