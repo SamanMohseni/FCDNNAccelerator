@@ -75,23 +75,14 @@ Finally, by combining the above circuits and applying pipelines and timing adjus
 
 | Image | Description |
 | --- | --- |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/d00b6fcc-42bc-4912-bd3a-73b157b88e46)
- | Multiplexer (Code in files MUX_2.v, MUX_3.v, and MUX_4.v based on the number of inputs) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/75a93410-e1d1-403c-8355-bdd327811598)
- | Register (Code in file SReg.v) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/ca2c4207-2ee1-4b13-b29f-5f45d4df8ef5)
- | Two pipeline layers (Code in file PipeReg.v) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/9b7ad3d6-9439-4600-b9d5-1121932e3c84)
- | N pipeline layers with the capability to bypass data (Code in file SelectablePipeReg.v) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/40d3cd76-9aaf-427c-b272-832d422de0d9)
- | Pipeline with the ability to switch between 3 states N layers, M layers, and bypassing data (Code in file SelectableExtendablePipeReg.v) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/5de546a4-d8b9-49e1-b18c-af63c3d47efd)
- | Module for adding the value of Exp (input) to the exp of a floating-point number (another input) (Code in file FPExpMultiplier) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/6f6b82ff-5d33-4562-a768-d7a8c036f40e)
- | Adds the input with a constant number 1 (uses a floating-point adder and does not have independent code) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e9fd6261-f32d-4822-b84a-7364997f330d)
- | 27-bit floating-point multiplier! (Code in file FloatingPointMultiplier.v and includes 2 submodules and 1 pipeline layer) |
-| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/7653af7d-d9ea-42e3-b4f1-dc855573dc87)
- | 27-bit floating-point adder (Code in file FloatingPointAdder.v and includes 3 main submodules and 2 pipeline layers) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/d00b6fcc-42bc-4912-bd3a-73b157b88e46) | Multiplexer (Code in files MUX_2.v, MUX_3.v, and MUX_4.v based on the number of inputs) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/75a93410-e1d1-403c-8355-bdd327811598) | Register (Code in file SReg.v) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/ca2c4207-2ee1-4b13-b29f-5f45d4df8ef5) | Two pipeline layers (Code in file PipeReg.v) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/9b7ad3d6-9439-4600-b9d5-1121932e3c84) | N pipeline layers with the capability to bypass data (Code in file SelectablePipeReg.v) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/40d3cd76-9aaf-427c-b272-832d422de0d9) | Pipeline with the ability to switch between 3 states N layers, M layers, and bypassing data (Code in file SelectableExtendablePipeReg.v) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/5de546a4-d8b9-49e1-b18c-af63c3d47efd) | Module for adding the value of Exp (input) to the exp of a floating-point number (another input) (Code in file FPExpMultiplier) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/6f6b82ff-5d33-4562-a768-d7a8c036f40e) | Adds the input with a constant number 1 (uses a floating-point adder and does not have independent code) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e9fd6261-f32d-4822-b84a-7364997f330d) | 27-bit floating-point multiplier! (Code in file FloatingPointMultiplier.v and includes 2 submodules and 1 pipeline layer) |
+| ![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/7653af7d-d9ea-42e3-b4f1-dc855573dc87) | 27-bit floating-point adder (Code in file FloatingPointAdder.v and includes 3 main submodules and 2 pipeline layers) |
 
 
