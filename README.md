@@ -12,9 +12,9 @@ This design also conducts a novel approach for performing computationally-intens
 Forward Propagation multiplies weight matrices with activation matrices. The matrices are spread across several RAM blocks to enable parallel reading of multiple elements from a column.
 The following two images illustrate the architectural structure, and how it's used during forward propagation.
 
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/84641aeb-b0d2-44e7-b640-02412623a052)
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/84641aeb-b0d2-44e7-b640-02412623a052" width=70% height=70%>
 
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/a61f3d4c-7466-4608-91c8-1b908b997d29)
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/a61f3d4c-7466-4608-91c8-1b908b997d29" width=70% height=70%>
 
 ## Sigmoid Function
 The sigmoid function, defined as `Sigmoid(x) = 1 / (1 + 2^(-x))`, is implemented in two steps:
@@ -36,8 +36,7 @@ We then compute `2^r` using its Taylor series expansion:
 - Total bits: 27 bits, which is a multiple of 9 and optimized for FPGA's M4k blocks, as each word is 9 bits.
 
 **Architectural setup for first Sigmod step:**
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/2a7cc33c-66cf-4da6-b398-3c11805af77d)
-
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/2a7cc33c-66cf-4da6-b398-3c11805af77d" width=90% height=90%>
 
 ### Step 2: Inversion of the resulting value.
 The second step involves inverting the result from step 1:
@@ -53,19 +52,18 @@ To find `1 / fraction`, we use the following converging series:
 ```
 
 **Architectural setup for second Sigmod step:**
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/63cceaf0-bbfb-498b-9cbe-81ec1a704ef7)
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/63cceaf0-bbfb-498b-9cbe-81ec1a704ef7" width=70% height=70%>
 
 ## Back Propagation
 Back Propagation calculates the error list and adjusts the weights accordingly.
 In this part of the algorithm, what cannot be easily done with the previous circuits is the multiplication of the transposed weight matrix by the error list. This is because parallel reading from this matrix involves 16 elements from one column, and after transposition, this rule changes. As a result, a different dataflow and architectural setup is needed for this part.
 
 **Architectural setup for back propagation:**
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/cbb38c35-c0e9-40d5-b5c5-115fc7fda395)
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/cbb38c35-c0e9-40d5-b5c5-115fc7fda395" width=80% height=80%>
 
 ## Element-wise Multiplication and Additiom
 Element-wise multiplication and addition of two matrices can also be performed in parallel, with the available components. For example, for element-wise multiplication, the following setup can be used:
-![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e5019d5e-feef-4b2f-80ec-f15299118942)
-
+<img src="https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/e5019d5e-feef-4b2f-80ec-f15299118942" width=90% height=90%>
 
 ## Final Architecture
 Finally, by combining the above circuits and applying pipelines and timing adjustments, we arrive at the following architecture (implemented in `FCDNNAccelerator/Core.v`):
@@ -87,21 +85,24 @@ Finally, by combining the above circuits and applying pipelines and timing adjus
 
 ## Testing
 The core processor has undergone several testings. The provided example demonstrates the testing of the sigmoid function's second step, where the Taylor series is used to calculate the inverse of `x`.
-```
+
 Let's assume:
+```
 x = 0_00000010_101001111111011110 = 2^2 * (1/2 + 1/8 + 1/64 + …) ≈ 2^2 * (1/2 + 1/8 + 1/32) = 2.625
 1/x = 1/2.625 = 0.381
+```
 Inputs to the core (1-fraction and –exp):
+```
 1 - fraction = floating point(1) - 0.101001111111011110 = 0.1111111… - 0.101001111111011110 = 0.(~101001111111011110) = 0.010110000000100001 → 1-fraction = 27'b0_00000000_010110000000100001
 -exp = -2
-
+```
 Output corresponding to the first input:
+```
 0_11111111_110000110001010001 = 2^(-1) * (1/2 + 1/4 + 1/128 + …) = 0.381 → as expected.
-
+```
 If the above inputs are applied, after passing through the pipeline path, the outputs appear consecutively in each clock (in the valid output sequence section).
-All Core functions have been tested similar to the example above and operate correctly.
 
-```verilog
+```
 exp = -2;
 mul_in_1_single = 27'b0_00000000_010110000000100001; #20;
 mul_in_1_single = 27'b0_00000000_100110101001010100; #20;
@@ -111,4 +112,8 @@ mul_in_1_single = 27'b0_00000000_100110101001010100; #20;
 mul_in_1_single = 27'b0_00000000_110100000100010101; #20;
 mul_in_1_single = 27'b0_00000000_010110000000100001;
 ```
-```
+
+![image](https://github.com/SamanMohseni/FCDNNAccelerator/assets/51726090/1a7caf3b-6e9a-45fb-b98a-46dc90ca763a)
+
+
+All Core functions have been tested similar to the example above and operate correctly.
